@@ -54,14 +54,15 @@ public class ScreenMonitorService extends Service {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            Intent i = new Intent(getApplicationContext(),GestureFinder.class);
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 wasScreenOn = false;
-                startService(new Intent(getApplicationContext(),GestureFinder.class));
+                startService(i);
                 Log.e("Screen is off","");
 
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 wasScreenOn = true;
-                stopService(new Intent(getApplicationContext(),GestureFinder.class));
+                stopService(i);
                 Toast.makeText(getApplicationContext(),"Yipee Screen is On",Toast.LENGTH_LONG).show();
                 Log.e("Screen is on","");
             }
