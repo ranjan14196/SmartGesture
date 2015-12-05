@@ -2,9 +2,13 @@ package com.smartgesture;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.widget.Toast;
 
 /**
  * @author DEEPANKAR
@@ -12,7 +16,8 @@ import android.support.annotation.Nullable;
  */
 public class ScreenMonitorService extends Service {
 
-    BroadcastReceiver screenStateReceiver;
+    private BroadcastReceiver screenStateReceiver;
+    public static boolean wasScreenOn = true;
 
     @Nullable
     @Override
@@ -23,16 +28,44 @@ public class ScreenMonitorService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        screenStateReceiver
+        screenStateReceiver = new ScreenReceiver();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+
+        registerReceiver(screenStateReceiver, filter);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.e("On start of service","");
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(screenStateReceiver);
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
+
+    class ScreenReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                // do whatever you need to do here
+                wasScreenOn = false;
+                Log.e("Screen is off","");
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                // and do whatever you need to do here
+                wasScreenOn = true;
+
+                Toast.makeText(getApplicationContext(),"Yipee Screen is On",Toast.LENGTH_LONG).show();
+                Log.e("Screen is on","");
+            }
+        }
+
     }
 }
