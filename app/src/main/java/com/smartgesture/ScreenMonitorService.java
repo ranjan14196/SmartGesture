@@ -39,7 +39,7 @@ public class ScreenMonitorService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e("On start of service","");
+        Log.e("On start of service", "");
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -55,13 +55,13 @@ public class ScreenMonitorService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                // do whatever you need to do here
                 wasScreenOn = false;
+                startService(new Intent(getApplicationContext(),GestureFinder.class));
                 Log.e("Screen is off","");
-            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                // and do whatever you need to do here
-                wasScreenOn = true;
 
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                wasScreenOn = true;
+                stopService(new Intent(getApplicationContext(),GestureFinder.class));
                 Toast.makeText(getApplicationContext(),"Yipee Screen is On",Toast.LENGTH_LONG).show();
                 Log.e("Screen is on","");
             }

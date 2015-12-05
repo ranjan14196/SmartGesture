@@ -20,7 +20,7 @@
         </activity>
 
         <service android:name=".ScreenMonitorService"/>
-
+        <service android:name=".GestureFinder"/>
     </application>
 
 </manifest>

@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /////////////////////////////////////////////////////////////////
-
         startService(new Intent(getApplicationContext(), ScreenMonitorService.class));
         Log.d("Activity is turned on","");
     }
